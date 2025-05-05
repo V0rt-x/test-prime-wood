@@ -1,0 +1,29 @@
+{
+    "name": "vortex/test-prime-wood",
+    "type": "project",
+    "description": "Тестовое задание для Prime Wood",
+    "require": {
+        "php": "^8.3",
+        "vlucas/phpdotenv": "^5.6"
+    },
+    "autoload": {
+        "psr-4": {
+            "TestPrimeWood\\": "src/",
+            "migrations\\": "migrations/"
+        },
+        "files": [
+            "src/helpers.php"
+        ]
+    },
+    "config": {
+        "optimize-autoloader": true,
+        "preferred-install": "dist",
+        "sort-packages": true,
+        "allow-plugins": {
+            "pestphp/pest-plugin": true,
+            "php-http/discovery": true
+        }
+    },
+    "minimum-stability": "stable",
+    "prefer-stable": true
+}
