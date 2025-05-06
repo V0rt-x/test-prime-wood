@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 require_once '../init.php';
 
 use TestPrimeWood\Application\Controllers\ProductsController;

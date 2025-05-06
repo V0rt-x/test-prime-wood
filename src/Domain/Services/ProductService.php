@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace TestPrimeWood\Domain\Services;
 use TestPrimeWood\Domain\Entities\Product;

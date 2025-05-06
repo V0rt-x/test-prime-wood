@@ -1,13 +1,12 @@
 <?php
+declare(strict_types=1);
 
 namespace TestPrimeWood\Application\Controllers;
 
-use DateTime;
 use TestPrimeWood\Application\Exceptions\ValidationException;
 use TestPrimeWood\Application\Requests\ListProductsRequest;
 use TestPrimeWood\Application\Requests\StoreProductRequest;
 use TestPrimeWood\Application\Responses\ListProductsResponse;
-use TestPrimeWood\Application\Responses\Response;
 use TestPrimeWood\Application\Responses\StoreProductResponse;
 use TestPrimeWood\Domain\Entities\Product;
 use TestPrimeWood\Domain\Services\ProductService;
