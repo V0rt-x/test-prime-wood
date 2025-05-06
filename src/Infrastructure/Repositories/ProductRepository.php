@@ -19,14 +19,12 @@ class ProductRepository
     {
         $serializedProduct = $product->toArray();
 
-        $result = pgsql()->query(sprintf(
-            "INSERT INTO %s (name, price, datetime) VALUES ('%s', %d, '%s') RETURNING id", self::$table,
-            $serializedProduct['name'],
-            $serializedProduct['price'],
-            $serializedProduct['datetime']
-        ))[0];
+        $result = pgsql()->query(
+            sprintf("INSERT INTO %s (name, price, datetime) VALUES ($1, $2, $3) RETURNING id", self::$table),
+            [$serializedProduct['name'], $serializedProduct['price'], $serializedProduct['datetime']]
+        )[0];
 
-        return (clone $product)->setId($result['id']);
+        return (clone $product)->setId(intval($result['id']));
     }
 
     /**
@@ -37,7 +35,7 @@ class ProductRepository
     {
         return array_map(
             fn(array $product) => Product::fromArray($product),
-            pgsql()->query(sprintf("SELECT * FROM %s LIMIT %d OFFSET %d", self::$table, $limit, $page * $limit))
+            pgsql()->query(sprintf('SELECT * FROM %s LIMIT $1 OFFSET $2', self::$table), [$limit, $page * $limit])
         );
     }
 }

@@ -10,7 +10,7 @@ class NameValidator implements ValidatesRequestField
     public function validate(mixed $value): void
     {
         if (empty($value)) {
-            throw new ValidationException('Наименование товара не может быть пустым.');
+            throw new ValidationException('Наименование товара не может быть пустым');
         }
     }
 }

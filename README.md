@@ -1,4 +1,42 @@
-# test-prime-wood
-Тестовое задание для Prime Wood
+# Тестовое задание для Prime Wood
 
-TODO: PDO, strict types, validation messages
+## Как развернуть проект
+
+Зайти в директорию проекта
+
+Выполнить `docker compose up -d`
+
+Зайти внутрь контейнера с приложением `docker exec -it test-prime-wood bash` 
+
+Установить зависимости `composer install --no-interaction --no-dev`
+
+Провести миграции `php migrate.php`
+
+## Функционал сервиса
+
+### Создание нового товара
+
+Параметры запроса
+
+| Параметр | Тип    | Обязательный | Доп. информация    |
+|----------|--------|--------------|--------------------|
+| name     | string | +            |                    |
+| price    | float  | +            |                    |
+| datetime | string | +            | Формат d.m.Y H:i:s |
+
+Пример запроса
+
+    curl --location --request POST 'localhost:8032?name=Test%20product&price=222.39&datetime=11.01.2021%2010%3A00%3A11'
+
+### Получение товаров
+
+Параметры запроса
+
+| Параметр | Тип | Обязательный | Доп. информация |
+|----------|-----|--------------|-----------------|
+| page     | int | -            | \>= 0           |
+| limit    | int | -            | \>= 0           |
+
+Пример запроса
+
+    curl --location 'localhost:8032?page=0&limit=5'

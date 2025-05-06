@@ -12,7 +12,7 @@ class Product
 
     public function __construct(
         protected string   $name,
-        protected float    $price,
+        protected int      $price,
         protected DateTime $datetime,
         protected ?int     $id = null,
     )
@@ -58,6 +58,6 @@ class Product
 
     public static function fromArray(array $product): static
     {
-        return new static($product['name'], $product['price'], DateTime::createFromFormat(self::DATABASE_DATETIME_FORMAT, $product['datetime']), $product['id']);
+        return new static($product['name'], intval($product['price']), DateTime::createFromFormat(self::DATABASE_DATETIME_FORMAT, $product['datetime']), intval($product['id']));
     }
 }

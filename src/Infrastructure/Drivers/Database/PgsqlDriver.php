@@ -65,12 +65,15 @@ class PgsqlDriver
 
     /**
      * @param string $query
+     * @param mixed ...$params
      * @return array
      * @throws PgsqlException
      */
-    public function query(string $query): array
+    public function query(string $query, array $params = []): array
     {
-        if (!$pgsqlResult = pg_query($this->connection, $query)) {
+        pg_prepare($this->connection, '', $query);
+
+        if (!$pgsqlResult = pg_execute($this->connection, '', $params)) {
             throw new PgsqlException(pg_last_error($this->connection));
         }
 

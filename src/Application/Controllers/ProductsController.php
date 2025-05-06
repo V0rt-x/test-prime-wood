@@ -49,8 +49,8 @@ class ProductsController
     {
         $data = $request->validated();
         $products = $this->service->list(
-            $data['page'] ?? 0,
-            $data['limit'] ?? 100
+            intval($data['page'] ?? 0),
+            intval($data['limit'] ?? 100)
         );
 
         return new ListProductsResponse($products);
