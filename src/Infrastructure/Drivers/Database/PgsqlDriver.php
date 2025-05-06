@@ -11,6 +11,9 @@ class PgsqlDriver
 
     private Connection $connection;
 
+    /**
+     * @throws PgsqlException
+     */
     private function __construct()
     {
         $this->connect(

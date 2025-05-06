@@ -7,7 +7,7 @@ use TestPrimeWood\Application\Validators\ValidatesRequestField;
 
 class Request
 {
-    /** @var array<string, ValidatesRequestField> */
+    /** @var array<string, class-string> */
     protected array $rules = [];
 
     protected array $data = [];
@@ -24,11 +24,22 @@ class Request
     /**
      * @return array
      * @throws ValidationException
+     * @throws \Exception
      */
     public function validated(): array
     {
         foreach ($this->data as $field => $value) {
-            $this->rules[$field]->validate($value);
+            $validator = new $this->rules[$field];
+
+            if (!$validator instanceof ValidatesRequestField) {
+                throw new \Exception('Валидатор должен реализовывать интерфейс ValidatesRequestField');
+            }
+
+            try {
+                $validator->validate($value);
+            } catch (ValidationException $e) {
+                throw new ValidationException(sprintf("Поле '%s': %s", $field, $e->getMessage()));
+            }
         }
 
         return $this->data;

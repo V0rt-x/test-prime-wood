@@ -13,7 +13,7 @@ class CreateProductsTable
     {
         pgsql()->query('
 CREATE TABLE products (
-    id        int PRIMARY KEY,
+    id        int GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     name      varchar(40) NOT NULL,
     price     integer NOT NULL,
     datetime  timestamp NOT NULL

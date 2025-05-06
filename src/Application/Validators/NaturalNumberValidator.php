@@ -8,8 +8,8 @@ class NaturalNumberValidator implements ValidatesRequestField
 {
     public function validate(mixed $value): void
     {
-        if (!is_int($value) || $value < 0) {
-            throw new ValidationException("$value не является натуральным числом");
+        if (!ctype_digit($value)) {
+            throw new ValidationException("Поле должно содержать целое число не меньше 0");
         }
     }
 }

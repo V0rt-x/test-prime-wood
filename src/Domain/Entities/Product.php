@@ -6,12 +6,17 @@ use DateTime;
 
 class Product
 {
+    const string DEFAULT_DATETIME_FORMAT = 'd.m.Y H:i:s';
+    const string DATABASE_DATETIME_FORMAT = 'Y-m-d H:i:s';
+
     public function __construct(
-        protected string $name,
-        protected float $price,
+        protected string   $name,
+        protected float    $price,
         protected DateTime $datetime,
-        protected ?int $id = null,
-    ) {}
+        protected ?int     $id = null,
+    )
+    {
+    }
 
     public function getName(): string
     {
@@ -46,7 +51,12 @@ class Product
             'id' => $this->id,
             'name' => $this->name,
             'price' => $this->price,
-            'datetime' => $this->datetime,
+            'datetime' => $this->datetime->format(self::DATABASE_DATETIME_FORMAT),
         ];
+    }
+
+    public static function fromArray(array $product): static
+    {
+        return new static($product['name'], $product['price'], DateTime::createFromFormat(self::DATABASE_DATETIME_FORMAT, $product['datetime']), $product['id']);
     }
 }

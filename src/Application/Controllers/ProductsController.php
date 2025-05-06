@@ -6,7 +6,9 @@ use DateTime;
 use TestPrimeWood\Application\Exceptions\ValidationException;
 use TestPrimeWood\Application\Requests\ListProductsRequest;
 use TestPrimeWood\Application\Requests\StoreProductRequest;
+use TestPrimeWood\Application\Responses\ListProductsResponse;
 use TestPrimeWood\Application\Responses\Response;
+use TestPrimeWood\Application\Responses\StoreProductResponse;
 use TestPrimeWood\Domain\Entities\Product;
 use TestPrimeWood\Domain\Services\ProductService;
 use TestPrimeWood\Infrastructure\Exceptions\PgsqlException;
@@ -22,33 +24,36 @@ class ProductsController
 
     /**
      * @param StoreProductRequest $request
-     * @return Response
+     * @return StoreProductResponse
      * @throws ValidationException|PgsqlException
      */
-    public function store(StoreProductRequest $request): Response
+    public function store(StoreProductRequest $request): StoreProductResponse
     {
         $data = $request->validated();
 
         $storedProduct = $this->service->store(new Product(
             $data['name'],
-            intval(floatval($data['price']) * 100),
-            DateTime::createFromFormat('', $data['datetime']),
+            $data['price'],
+            $data['datetime'],
         ));
 
-        return new Response($storedProduct->toArray());
+        return new StoreProductResponse($storedProduct);
     }
 
     /**
      * @param ListProductsRequest $request
-     * @return Response
+     * @return ListProductsResponse
      * @throws PgsqlException
      * @throws ValidationException
      */
-    public function list(ListProductsRequest $request): Response
+    public function list(ListProductsRequest $request): ListProductsResponse
     {
         $data = $request->validated();
-        $products = $this->service->list($data['page'], $data['limit']);
+        $products = $this->service->list(
+            $data['page'] ?? 0,
+            $data['limit'] ?? 100
+        );
 
-        return new Response(array_map(fn(Product $product) => $product->toArray(), $products));
+        return new ListProductsResponse($products);
     }
 }

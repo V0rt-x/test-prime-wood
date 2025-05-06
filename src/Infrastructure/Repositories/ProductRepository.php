@@ -16,11 +16,14 @@ class ProductRepository
      */
     public function store(Product $product): Product
     {
-        $result = pgsql()->query(sprintf("INSERT INTO %s (name, price, datetime) VALUES (%s, %d, %d)", self::$table,
-            $product->getName(),
-            $product->getPrice(),
-            $product->getDatetime()->getTimestamp()
-        ));
+        $serializedProduct = $product->toArray();
+
+        $result = pgsql()->query(sprintf(
+            "INSERT INTO %s (name, price, datetime) VALUES ('%s', %d, '%s') RETURNING id", self::$table,
+            $serializedProduct['name'],
+            $serializedProduct['price'],
+            $serializedProduct['datetime']
+        ))[0];
 
         return (clone $product)->setId($result['id']);
     }
@@ -32,7 +35,7 @@ class ProductRepository
     public function list(int $page, int $limit): array
     {
         return array_map(
-            fn(array $product) => new Product($product['name'], $product['price'], $product['datetime'], $product['id']),
+            fn(array $product) => Product::fromArray($product),
             pgsql()->query(sprintf("SELECT * FROM %s LIMIT %d OFFSET %d", self::$table, $limit, $page * $limit))
         );
     }
